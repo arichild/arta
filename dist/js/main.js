@@ -1,96 +1,80 @@
-$( document ).ready(function() {
-  // popup
-  $(document).on("click", ".mfp-link", function () {
-    var a = $(this);
+document.addEventListener("DOMContentLoaded", () => {
+  let vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
 
-    $.magnificPopup.open({
-      items: { src: a.attr("data-href") },
-      type: "ajax",
-      overflowY: "scroll",
-      removalDelay: 300,
-      mainClass: 'my-mfp-zoom-in',
-      ajax: {
-        tError: "Error. Not valid url",
-      },
-      callbacks: {
-        open: function () {
-          setTimeout(function(){
-            $('.mfp-wrap').addClass('not_delay');
-            $('.mfp-popup').addClass('not_delay');
-          },700);
-        }
-      },
+  window.addEventListener('resize', () => {
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
 
-      callbacks: {
-        open: function() {
-          document.documentElement.style.overflow = 'hidden'
-        },
+    setBannerHeight()
+  }, true);
 
-        close: function() {
-          document.documentElement.style.overflow = ''
-        }
+  const continueBtn = document.querySelector('.ui-btn.continue')
+  if(continueBtn) {
+    continueBtn.addEventListener('click', () => {
+      const radioBtn = document.querySelector('.ui-radio:checked')
+      const link = radioBtn.dataset.link
+
+      if(link) {
+        window.open(link)
       }
-    });
-    return false;
-  });
-
-
-
-  // validate
-  $.validator.messages.required = 'Пожалуйста, введите данные';
-
-  jQuery.validator.addMethod("lettersonly", function(value, element) {
-    return this.optional(element) || /^([а-яё ]+|[a-z ]+)$/i.test(value);
-  }, "Поле может состоять из букв и пробелов, без цифр");
-
-  jQuery.validator.addMethod("phone", function (value, element) {
-    if (value.startsWith('+375')) {
-      return /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){12}(\s*)?$/i.test(value);
-    } else if (value.startsWith('+7')) {
-      return /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){11}(\s*)?$/i.test(value);
-    } else {
-      return /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){11,14}(\s*)?$/i.test(value);
-    }
-  }, "Введите полный номер");
-
-
-
-  // imask
-  let phone = document.querySelectorAll('.phone-mask')
-
-  if(phone.length) {
-    phone.forEach(element => {
-      IMask(element, {
-        mask: [
-          {
-            mask: '+{375} (00) 000 00 00',
-            startsWith: '375',
-            overwrite: true,
-            lazy: false,
-            placeholderChar: '_',
-          },
-          {
-            mask: '+{7} (000) 000 00 00',
-            startsWith: '7',
-            overwrite: true,
-            lazy: false,
-            placeholderChar: '_',
-          },
-          {
-            mask: '+0000000000000',
-            startsWith: '',
-            country: 'unknown'
-          }
-        ],
-
-        dispatch: function (appended, dynamicMasked) {
-          var number = (dynamicMasked.value + appended).replace(/\D/g, '');
-
-          return dynamicMasked.compiledMasks.find(function (m) {
-            return number.indexOf(m.startsWith) === 0;
-          });
-        }
-      })
-    });
+    })
   }
-});
+
+  const searchParams = new URLSearchParams(window.location.search)
+  const systemLang = navigator.language
+  const urlLang = searchParams.get('lang')
+
+  async function setLang(lang) {
+    try {
+      const res = await fetch(`../i18n/${lang}.json`)
+      const data = await res.json()
+
+      updateUI(data)
+      setBannerHeight()
+    } catch(e) {
+      await loadDefaultLang()
+    }
+  }
+
+  async function loadDefaultLang() {
+    const res = await fetch('../i18n/en.json')
+    const data = await res.json()
+
+    updateUI(data)
+    setBannerHeight()
+  }
+
+  function updateUI(data) {
+    const allElements = document.querySelectorAll('.lang')
+
+    allElements.forEach(el => {
+      const key = el.dataset.key
+      const price = el.dataset.price
+
+      if(data[key].includes('{{price}}')) {
+        data[key] = data[key].replace('{{price}}', price)
+      }
+
+      if(data[key]) {
+        el.innerHTML = data[key]
+      }
+    })
+  }
+
+  if(urlLang || urlLang === systemLang) {
+    setLang(urlLang)
+  } else {
+    setLang(systemLang)
+  }
+
+ function setBannerHeight() {
+    const footer = document.querySelector('.footer')
+    const banner = document.querySelector('.banner')
+
+    const footerHeight = footer.getBoundingClientRect().height
+    const bannerHeight = `calc(100vh - ${footerHeight}px)`
+
+    banner.style.height = bannerHeight
+  }
+})

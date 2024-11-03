@@ -25,3 +25,113 @@
   top: 0!important;
   height: 100%!important;
 }
+
+.ui-radio-btn {
+  position: relative;
+  min-height: 56px;
+  line-height: 1;
+  display: flex;
+  margin-bottom: 8px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.ui-radio {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+
+  &-subtitle {
+    font-size: clamp(0.5rem,4.28vw,0.9375rem);
+    // clamp(0.60rem, 2.5vw, 1rem)
+  }
+
+  &-title {
+    color: #fff;
+    font-size: clamp(0.5rem,4.28vw,1rem);
+
+    font-weight: 600;
+    text-transform: uppercase;
+
+    &.mb-4 {
+      margin-bottom: 4px;
+    }
+  }
+
+  &-txt {
+    padding-right: 10px;
+    // max-width: 180px;
+    // flex: 0 0 180px;
+
+    &:last-child {
+      // max-width: calc(100% - 180px);
+      // flex: 0 0 calc(100% - 180px);
+      padding-right: 0;
+    }
+  }
+}
+
+.ui-radio+label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 24px;
+  padding-right: 65px;
+  border-radius: 32px;
+  width: 100%;
+  cursor: pointer;
+  font-size: 20px;
+  min-height: 56px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #cccbce;
+  font-weight: 400;
+
+  @media(max-width: 375.99px) {
+    padding-right: 62px;
+  }
+}
+
+.ui-radio:checked+label {
+  outline: #fff solid 1px;
+  background-color:  rgba(255, 255, 255, 0.3);
+}
+
+.ui-btn {
+  display: block;
+  width: 100%;
+  height: 56px;
+  line-height: 56px;
+  text-align: center;
+  background-color: #fff;
+  color: #070B33;
+  font-size: 20px;
+  font-weight: 600;
+  border-radius: 32px;
+  border: none;
+  cursor: pointer;
+  transition: color .2s ease, background-color .2s ease;
+  font-family: SF-Pro;
+
+  &:hover {
+    background-color: #e9e9e9;
+    color: #5f5f5f;
+  }
+}
+
+.ui-tag {
+  position: absolute;
+  top: -12px;
+  right: 24px;
+  height: 20px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 2px 22px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.3);
+  line-height: 18px;
+  text-transform: uppercase
+}
