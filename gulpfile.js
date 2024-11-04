@@ -11,6 +11,7 @@ global.app = {
 import { reset } from "./gulp/tasks/reset.js";
 import { html } from "./gulp/tasks/html.js";
 import { popup } from "./gulp/tasks/popup.js";
+import { i18n } from "./gulp/tasks/i18n.js";
 import { scss } from "./gulp/tasks/scss.js";
 import { js } from "./gulp/tasks/js.js";
 import { img } from "./gulp/tasks/img.js";
@@ -21,6 +22,7 @@ import { otfToTtf, ttfToWoff, fonstStyle } from "./gulp/tasks/fonts.js";
 function watcher() {
   gulp.watch(path.watch.html, html);
   gulp.watch(path.watch.popup, popup);
+  gulp.watch(path.watch.i18n, i18n);
   gulp.watch(path.watch.scss, scss);
   gulp.watch(path.watch.js, js);
   gulp.watch(path.watch.img, img);
@@ -37,7 +39,7 @@ const svgSprite = gulp.series(svg);
 // const baseTasks = gulp.parallel(html, scss, js, img, popup)
 
 // @task: + fonts.js
-const baseTasks = gulp.series(fonts, gulp.parallel(html, scss, js, img, svg))
+const baseTasks = gulp.series(fonts, gulp.parallel(html,i18n, scss, js, img, svg))
 
 // @task: + svgSprite.js
 // const baseTasks = gulp.series(svgSprite, gulp.parallel(html, scss, js, img, svg))

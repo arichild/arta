@@ -9,6 +9,7 @@ export const path = {
   build: {
     html: `${buildFolder}/`,
     popup: `${buildFolder}/popup/`,
+    i18n: `${buildFolder}/i18n/`,
     css: `${buildFolder}/css/`,
     js: `${buildFolder}/js/`,
     img: `${buildFolder}/images/`,
@@ -19,6 +20,7 @@ export const path = {
   src: {
     html: `${srcFolder}/*.html`,
     popup: `${srcFolder}/popup/*.html`,
+    i18n: `${srcFolder}/i18n/*.json`,
     scss: `${srcFolder}/scss/style.scss`,
     js: `${srcFolder}/js/*.js`,
     img: `${srcFolder}/images/**/*.*`,
@@ -30,6 +32,7 @@ export const path = {
   watch: {
     html: `${srcFolder}/**/*.html`,
     popup: `${srcFolder}/**/*.html`,
+    i18n: `${srcFolder}/**/*.json`,
     scss: `${srcFolder}/scss/**/*.scss`,
     js: `${srcFolder}/js/*.js`,
     img: `${srcFolder}/images/**/*.*`,

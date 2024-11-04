@@ -1,11 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-  let vh = window.innerHeight * 0.01;
-  document.documentElement.style.setProperty('--vh', `${vh}px`);
-
+  // The trick to viewport units on mobile
   window.addEventListener('resize', () => {
-    let vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-
     setBannerHeight()
   }, true);
 
@@ -22,12 +17,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const searchParams = new URLSearchParams(window.location.search)
-  const systemLang = navigator.language
+  const systemLang = navigator.language.split('-')
+  const currentUrl = window.location.href.split('?')[0]
   const urlLang = searchParams.get('lang')
 
   async function setLang(lang) {
     try {
-      const res = await fetch(`../i18n/${lang}.json`)
+      const res = await fetch(`${currentUrl}/i18n/${lang}.json`)
       const data = await res.json()
 
       updateUI(data)
@@ -38,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function loadDefaultLang() {
-    const res = await fetch('../i18n/en.json')
+    const res = await fetch(`${currentUrl}/i18n/en.json`)
     const data = await res.json()
 
     updateUI(data)
@@ -62,19 +58,20 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 
-  if(urlLang || urlLang === systemLang) {
+  if(urlLang || urlLang === systemLang[0]) {
     setLang(urlLang)
   } else {
-    setLang(systemLang)
+    setLang(systemLang[0])
   }
 
  function setBannerHeight() {
-    const footer = document.querySelector('.footer')
-    const banner = document.querySelector('.banner')
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
 
-    const footerHeight = footer.getBoundingClientRect().height
-    const bannerHeight = `calc(100vh - ${footerHeight}px)`
+    const footer = document.querySelector('.footer');
+    const banner = document.querySelector('.banner');
+    const footerHeight = footer.getBoundingClientRect().height;
 
-    banner.style.height = bannerHeight
+    banner.style.height = `calc(var(--vh, 1vh) * 100 - ${footerHeight}px)`;
   }
 })
