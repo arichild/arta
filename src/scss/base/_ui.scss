@@ -44,6 +44,18 @@
       }
      }
   }
+
+  @media(max-width: 370.99px) {
+    &-txt {
+      max-width: none;
+      flex: none;
+
+      &:last-child {
+        max-width: none;
+        flex: none;
+      }
+    }
+  }
 }
 
 .ui-radio+label {
